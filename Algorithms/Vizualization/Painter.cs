@@ -104,8 +104,8 @@ namespace Vizualization
 
             parent.X += (cof > 0 ? x : -x);
             parent.Y += (cof > 0 ? y : -y);
-            child.X += (cof < 0 ? x : -x);
-            child.Y += (cof < 0 ? y : -y);
+            child.X -= (cof > 0 ? x : -x);
+            child.Y -= (cof > 0 ? y : -y);
 
             g.DrawLine(new Pen(ConnectionColor), parent, child);
         }
