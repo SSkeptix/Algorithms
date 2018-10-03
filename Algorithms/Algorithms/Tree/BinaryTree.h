@@ -140,13 +140,13 @@ void BinaryTree<T>::toJson(std::ostream& out) {
 
 template<class T>
 void BinaryTree<T>::nodeToJson(BinaryNode<T>* node, std::ostream& out) {
-	out << "{ \"value\": " << node->value;
+	out << "{ \"Value\": " << node->value;
 	if (node->left != NULL) {
-		out << ", \"left\":";
+		out << ", \"Left\":";
 		nodeToJson(node->left, out);
 	}
 	if (node->right != NULL) {
-		out << ", \"right\":";
+		out << ", \"Right\":";
 		nodeToJson(node->right, out);
 	}
 
