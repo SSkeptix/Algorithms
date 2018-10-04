@@ -121,7 +121,8 @@
     <ClInclude Include="configs.h" />
     <ClInclude Include="Tree\BinaryNode.h" />
     <ClInclude Include="Tree\BinaryTree.h" />
-    <ClInclude Include="Wrapers.h" />
+    <ClInclude Include="Tree\BlackRedTree.h" />
+    <ClInclude Include="Tree\BrNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

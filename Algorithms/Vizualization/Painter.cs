@@ -50,7 +50,7 @@ namespace Vizualization
             var position = CapculateNodePosition(currentHeight, currentWidth);
             if (parentPosition.HasValue)
                 DrawConnection(g, parentPosition.Value, position);
-            DrawNode(g, node.Value, position);
+            DrawNode(g, node, position);
 
             if (node.Left != null)
                 DrawNode(g, node.Left, currentHeight + 1, 2 * currentWidth, position);
@@ -76,7 +76,7 @@ namespace Vizualization
             g.FillRectangle(new SolidBrush(BackgoundColor), 0, 0, _width + 2 * PictureMargin, _height + 2 * PictureMargin);
         }
 
-        private void DrawNode(Graphics g, T value, PointF position)
+        private void DrawNode(Graphics g, Tree<T> node, PointF position)
         {
             var realPosition = new PointF
             {
@@ -87,7 +87,8 @@ namespace Vizualization
                 realPosition.X, realPosition.Y,
                 NodeDiameter, NodeDiameter);
 
-            g.DrawString(value.ToString(), Font, new SolidBrush(NodeColor), 
+            var nodeColor = node.IsBlack == false ? Color.Red : Color.Black;
+            g.DrawString(node.Value.ToString(), Font, new SolidBrush(nodeColor), 
                 realPosition.X + 3, realPosition.Y + 7);
         }
 

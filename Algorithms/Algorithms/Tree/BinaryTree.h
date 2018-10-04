@@ -45,8 +45,6 @@ void BinaryTree<T>::insert(const T& value)
 	{
 		if (*node == NULL) {
 			*node = new BinaryNode<T>(parent, value);
-			if (_root == NULL)
-				_root = *node;
 			break;
 		}
 		else {

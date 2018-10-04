@@ -21,10 +21,13 @@
     <ClInclude Include="Tree\BinaryNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Wrapers.h">
+    <ClInclude Include="configs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="configs.h">
+    <ClInclude Include="Tree\BrNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\BlackRedTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
