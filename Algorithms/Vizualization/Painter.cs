@@ -87,7 +87,7 @@ namespace Vizualization
                 realPosition.X, realPosition.Y,
                 NodeDiameter, NodeDiameter);
 
-            var nodeColor = node.IsBlack == false ? Color.Red : Color.Black;
+            var nodeColor = node.IsRed == true ? Color.Red : Color.Black;
             g.DrawString(node.Value.ToString(), Font, new SolidBrush(nodeColor), 
                 realPosition.X + 3, realPosition.Y + 7);
         }

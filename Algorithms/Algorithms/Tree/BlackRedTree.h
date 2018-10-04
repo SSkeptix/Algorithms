@@ -21,7 +21,6 @@ protected:
 	BrNode<T>* _root;
 
 	BrNode<T>* findNode(const T& value);
-	void nodeToJson(BrNode<T>* node, std::ostream& out);
 };
 
 
@@ -46,7 +45,7 @@ void BlackRedTree<T>::insert(const T& value)
 		if (*node == NULL) {
 			*node = new BrNode<T>(parent, value);
 			if (_root == *node)
-				_root->isBlack = true;
+				_root->isRed = false;
 			break;
 		}
 		else {
@@ -61,36 +60,29 @@ void BlackRedTree<T>::insert(const T& value)
 	}
 
 	// Balance tree part.
-	if (parent != NULL && !parent->isBlack) {
-		if (parent->parent->hasOneChild()) {
-			BrNode<T> *grantParent = parent->parent;
+	if (parent != NULL && parent->isRed) {
+		BrNode<T> *newNode = *node;
 
-			// We have 3 nodes: grantParent, parent, and node -> now we will restructure them.
-			
-			// 1) Sort them.
-			BrNode<T>* nodes[3] = { grantParent, parent, *node };
-			for (int i = 0; i < 3; i++)
-				for (int j = 0; j < 2; j++)
-					if (nodes[i]->value < nodes[j]->value)
-						std::swap(nodes[i], nodes[j]);
+		bool isChanged;
+		do
+		{
+			isChanged = false;
+			if (newNode->isNeedMoveDownBlackness()) {
+				newNode->moveDownBlackness();
+				newNode = newNode->parent->parent;
+				isChanged = true;
+			}
+			if (newNode->isNeedRotate()) {
+				if (newNode->parent->parent == _root)
+					_root = newNode->rotate();
+				else
+					newNode->rotate();
+				isChanged = true;
+			}
+		} while (isChanged);
 
-			// 2) Build sub tree. [0] - leftNode, [1] - root, [2] - right.
-			grantParent->replaceMeForParent(nodes[1]);
-			nodes[1]->parent = grantParent->parent;
-			nodes[1]->isBlack = true;
-			nodes[1]->left = nodes[0];
-			nodes[1]->right = nodes[2];
-			if (_root == grantParent)
-				_root = nodes[1];
-
-			nodes[0]->parent = nodes[1];
-			nodes[0]->isBlack = false;
-			nodes[0]->left = nodes[0]->right = NULL;
-
-			nodes[2]->parent = nodes[1];
-			nodes[2]->isBlack = false;
-			nodes[2]->left = nodes[2]->right = NULL;
-		}
+		if (_root->isRed)
+			_root->isRed = false;
 	}
 }
 
@@ -166,23 +158,7 @@ void BlackRedTree<T>::remove(const T& value) {
 template<class T>
 void BlackRedTree<T>::toJson(std::ostream& out) {
 	if (_root != NULL)
-		nodeToJson(_root, out);
+		_root->toJson(out);
 	else
 		out << "{ }";
-}
-
-template<class T>
-void BlackRedTree<T>::nodeToJson(BrNode<T>* node, std::ostream& out) {
-	out << "{ \"Value\": " << node->value
-		<< ", \"IsBlack\": " << node->isBlack ? "true" : "false";
-	if (node->left != NULL) {
-		out << ", \"Left\":";
-		nodeToJson(node->left, out);
-	}
-	if (node->right != NULL) {
-		out << ", \"Right\":";
-		nodeToJson(node->right, out);
-	}
-
-	out << " }";
 }

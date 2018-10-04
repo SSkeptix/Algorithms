@@ -11,7 +11,7 @@ namespace Vizualization
         public T Value { get; set; }
         public Tree<T> Left { get; set; }
         public Tree<T> Right { get; set; }
-        public bool? IsBlack { get; set; }
+        public bool? IsRed { get; set; }
 
         public int GetHeight()
         {

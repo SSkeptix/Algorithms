@@ -17,12 +17,12 @@ int main() {
 
 	out << "[ ";
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 5; i++) {
 		binaryTree.insert(i);
 		binaryTree.toJson(out);
 		out << ",\n";
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 40; i++) {
 		tree.insert(i);
 		tree.toJson(out);
 		out << ",\n";
