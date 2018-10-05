@@ -27,8 +27,14 @@ namespace Vizualization
         {
             _tree = tree;
 
+            if (tree == null)
+            {
+                _height = _width = 2 * PictureMargin;
+                return;
+            }
+
             // Calculate picture size.
-            float heightNodeCount = tree.GetHeight();
+            int  heightNodeCount = tree.GetHeight();
             _height = NodeDiameter * heightNodeCount + VerticalDistanceBetweenNodes * (heightNodeCount - 1);
             _width = _tree.LeftMargin + _tree.RightMargin;
         }
@@ -40,12 +46,15 @@ namespace Vizualization
             {
                 DrawBackground(g);
 
-                var nodePosition = new PointF
+                if (_tree != null)
                 {
-                    X = _tree.LeftMargin - NodeDiameter / 2,
-                    Y = 0,
-                };
-                DrawNode(g, _tree, nodePosition);
+                    var nodePosition = new PointF
+                    {
+                        X = _tree.LeftMargin - NodeDiameter / 2,
+                        Y = 0,
+                    };
+                    DrawNode(g, _tree, nodePosition);
+                }
             }
             image.Save(fileName);
         }
