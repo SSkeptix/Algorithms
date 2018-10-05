@@ -12,7 +12,7 @@ namespace Vizualization
         public const float PictureMargin = 5;
         public const float NodeDiameter = 30;
         public const float NodeRadius = NodeDiameter / 2;
-        public const float VerticalDistanceBetweenNodes = 50;
+        public const float VerticalDistanceBetweenNodes = 20;
         public const float HorizontalDistanceBetweenNodes = 10;
 
         public static readonly Color BackgoundColor = Color.White;
