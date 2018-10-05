@@ -30,8 +30,7 @@ namespace Vizualization
             // Calculate picture size.
             float heightNodeCount = tree.GetHeight();
             _height = NodeDiameter * heightNodeCount + VerticalDistanceBetweenNodes * (heightNodeCount - 1);
-            float widthNodeCount = (float)Math.Pow(2, heightNodeCount - 1);
-            _width = NodeDiameter * widthNodeCount + HorizontalDistanceBetweenNodes * (widthNodeCount - 1);
+            _width = _tree.LeftMargin + _tree.RightMargin;
         }
 
         public void DrawTree(string fileName)
@@ -40,43 +39,49 @@ namespace Vizualization
             using (var g = Graphics.FromImage(image))
             {
                 DrawBackground(g);
-                DrawNode(g, _tree, 0, 0);
+
+                var nodePosition = new PointF
+                {
+                    X = _tree.LeftMargin - NodeDiameter / 2,
+                    Y = 0,
+                };
+                DrawNode(g, _tree, nodePosition);
             }
             image.Save(fileName);
         }
 
-        private void DrawNode(Graphics g, Tree<T> node, int currentHeight, int currentWidth, PointF? parentPosition = null)
+        private void DrawNode(Graphics g, Tree<T> node, PointF nodePosition, PointF? parentPosition = null)
         {
-            var position = CapculateNodePosition(currentHeight, currentWidth);
+            DrawNodeValue(g, node, nodePosition);
             if (parentPosition.HasValue)
-                DrawConnection(g, parentPosition.Value, position);
-            DrawNode(g, node, position);
+                DrawConnection(g, parentPosition.Value, nodePosition);
 
             if (node.Left != null)
-                DrawNode(g, node.Left, currentHeight + 1, 2 * currentWidth, position);
+                DrawNode(g: g,
+                    node: node.Left,
+                    nodePosition: new PointF
+                    {
+                        X = nodePosition.X - node.Left.RightMargin,
+                        Y = nodePosition.Y + NodeDiameter + VerticalDistanceBetweenNodes,
+                    },
+                    parentPosition: nodePosition);
             if (node.Right != null)
-                DrawNode(g, node.Right, currentHeight + 1, 2 * currentWidth + 1, position);
+                DrawNode(g: g, 
+                    node: node.Right,
+                    nodePosition: new PointF
+                    {
+                        X = nodePosition.X + node.Right.LeftMargin,
+                        Y = nodePosition.Y + NodeDiameter + VerticalDistanceBetweenNodes,
+                    },
+                    parentPosition: nodePosition);
         }
-
-        // nodeHeight and nodeWidth are zero based.
-        private PointF CapculateNodePosition(int nodeHeight, int nodeWidth)
-        {
-            int maxWidthCount = (int)Math.Pow(2, nodeHeight);
-            float nodeWidthAvailable = _width / maxWidthCount;
-
-            return new PointF
-            {
-                X = nodeWidthAvailable * nodeWidth + nodeWidthAvailable / 2 - NodeRadius,
-                Y = nodeHeight * (NodeDiameter + VerticalDistanceBetweenNodes),
-            };
-        }
-
+        
         private void DrawBackground(Graphics g)
         {
             g.FillRectangle(new SolidBrush(BackgoundColor), 0, 0, _width + 2 * PictureMargin, _height + 2 * PictureMargin);
         }
 
-        private void DrawNode(Graphics g, Tree<T> node, PointF position)
+        private PointF DrawNodeValue(Graphics g, Tree<T> node, PointF position)
         {
             var realPosition = new PointF
             {
@@ -90,25 +95,33 @@ namespace Vizualization
             var nodeColor = node.IsRed == true ? Color.Red : Color.Black;
             g.DrawString(node.Value.ToString(), Font, new SolidBrush(nodeColor), 
                 realPosition.X + 3, realPosition.Y + 7);
+
+            return realPosition;
         }
 
         private void DrawConnection(Graphics g, PointF parent, PointF child)
         {
-            parent.X += PictureMargin + NodeRadius;
-            parent.Y += PictureMargin + NodeRadius;
-            child.X += PictureMargin + NodeRadius;
-            child.Y += PictureMargin + NodeRadius;
+            var newParent = new PointF
+            {
+                X = parent.X + PictureMargin + NodeRadius,
+                Y = parent.Y + PictureMargin + NodeRadius,
+            };
+            var newChild = new PointF
+            {
+                X = child.X + PictureMargin + NodeRadius,
+                Y = child.Y + PictureMargin + NodeRadius,
+            };
 
-            float cof = (parent.Y - child.Y) / (parent.X - child.X);
+            float cof = (newParent.Y - newChild.Y) / (newParent.X - newChild.X);
             float x = NodeRadius / (float)Math.Sqrt(cof * cof + 1);
             float y = cof * x;
 
-            parent.X += (cof > 0 ? x : -x);
-            parent.Y += (cof > 0 ? y : -y);
-            child.X -= (cof > 0 ? x : -x);
-            child.Y -= (cof > 0 ? y : -y);
+            newParent.X += (cof > 0 ? x : -x);
+            newParent.Y += (cof > 0 ? y : -y);
+            newChild.X -= (cof > 0 ? x : -x);
+            newChild.Y -= (cof > 0 ? y : -y);
 
-            g.DrawLine(new Pen(ConnectionColor), parent, child);
+            g.DrawLine(new Pen(ConnectionColor), newParent, newChild);
         }
 
     }
