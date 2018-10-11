@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="configs.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="Tree\BinaryNode.h" />
     <ClInclude Include="Tree\BinaryTree.h" />
     <ClInclude Include="Tree\BlackRedTree.h" />
