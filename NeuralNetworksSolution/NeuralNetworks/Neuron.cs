@@ -24,10 +24,12 @@ namespace NeuralNetworks
         private Func<double, double> ActivationFunction, ActivationFunctionDerivative;
         public double OutputVal { get; set; }
 
-        public Neuron(int numOutputs, int myIndex, Func<double, double> activationFunction = null)
+        public Neuron(int numOutputs, int myIndex, 
+            Func<double, double> aFunction = null, 
+            Func<double, double> aFunctionDerivative = null)
         {
-            ActivationFunction = activationFunction ?? ActivationFuntions.ActivationFunction;
-            ActivationFunctionDerivative = ActivationFuntions.ActivationFunctionDerivative;
+            ActivationFunction = aFunction ?? ActivationFuntions.ActivationFunction;
+            ActivationFunctionDerivative = aFunctionDerivative ?? ActivationFuntions.ActivationFunctionDerivative;
             _outputWeights = new Connection[numOutputs];
             _myIndex = myIndex;
 
@@ -57,11 +59,10 @@ namespace NeuralNetworks
 
         public void UpdateInputWeights(Layer prevLayer)
         {
-            for (int i = 0; i < prevLayer.Count(); i++)
+            foreach (var neuron in prevLayer)
             {
-                var neuron = prevLayer[i];
-                double oldDeltaWeight = neuron._outputWeights[_myIndex].DeltaWeight;
-                double newDeltaWeight = _eta * neuron.OutputVal * _gradient * _alpha * oldDeltaWeight;
+                double newDeltaWeight = _eta * neuron.OutputVal * _gradient 
+                    + _alpha * neuron._outputWeights[_myIndex].DeltaWeight;
                 neuron._outputWeights[_myIndex].DeltaWeight = newDeltaWeight;
                 neuron._outputWeights[_myIndex].Weight += newDeltaWeight;
             }

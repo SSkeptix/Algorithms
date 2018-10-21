@@ -63,10 +63,9 @@ namespace NeuralNetworks
 
             for (int layerNum = _layers.Count() - 2; layerNum > 0; layerNum--)
             {
-                var hiddenLayer = _layers[layerNum];
                 var nextLayer = _layers[layerNum + 1];
-                for (int i = 0; i < hiddenLayer.Count(); i++)
-                    hiddenLayer[i].CalcHiddenGradients(nextLayer);
+                foreach (var neuron in _layers[layerNum])
+                    neuron.CalcHiddenGradients(nextLayer);
             }
 
             for (int layerNum = _layers.Count() - 1; layerNum > 0; layerNum--)

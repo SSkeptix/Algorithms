@@ -45,19 +45,6 @@ namespace NeuralNetworks.Console
 
                 net.BackProp(data[i].Out);
                 logger.LogLine($"Net average error: {net.RecentAverageError.ToString("F9")}\n");
-
-                if (i == 100)
-                    iii = 0;
-                if (i == 200)
-                    iii = 0;
-                if (i == 300)
-                    iii = 0;
-                if (i == 400)
-                    iii = 0;
-                if (i == 500)
-                    iii = 0;
-                if (i == 600)
-                    iii = 0;
             }
 
             logger.LogLine("Done");
