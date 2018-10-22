@@ -11,24 +11,23 @@ namespace NeuralNetworks
 
         private double _error;
         public double RecentAverageError { get; private set; }
-        private List<Layer> _layers;
+        private Layer[] _layers;
 
-        public Net(int[] topology)
+        public Net(int[] topology, ActivationFuntions activationFunctions = null)
         {
-            _layers = new List<Layer>();
+            _layers = new Layer[topology.Length];
 
             for (int layerNum = 0; layerNum < topology.Length; ++layerNum)
             {
-                var newLayer = new Layer();
-                _layers.Add(newLayer);
+                _layers[layerNum] = new Layer();
                 int numOutputs = (layerNum == topology.Count() - 1) 
                     ? 0 
                     : topology[layerNum + 1];
 
                 for (int i = 0; i <= topology[layerNum]; i++)
-                    newLayer.Add(new Neuron(numOutputs, i));
+                    _layers[layerNum].Add(new Neuron(numOutputs, i, activationFunctions));
 
-                newLayer.Last().OutputVal = 1;
+                _layers[layerNum].Last().OutputVal = 1;
             }
         }
 

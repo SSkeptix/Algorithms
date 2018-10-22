@@ -4,9 +4,19 @@ using System.Text;
 
 namespace NeuralNetworks
 {
-    public static class ActivationFuntions
+    public class ActivationFuntions
     {
-        public static double ActivationFunction(double x) => Math.Tanh(x);
-        public static double ActivationFunctionDerivative(double x) => 1.0 - x * x;
+        public ActivationFunction ActivationFunction { get; set; }
+        public ActivationFunctionDerivative ActivationFunctionDerivative { get; set; }
+
+        public static ActivationFuntions Tanh
+            => new ActivationFuntions
+            {
+                ActivationFunction = x => Math.Tanh(x),
+                ActivationFunctionDerivative = x => 1.0 - x * x,
+            };
     }
+
+    public delegate double ActivationFunction(double arg);
+    public delegate double ActivationFunctionDerivative(double arg);
 }
