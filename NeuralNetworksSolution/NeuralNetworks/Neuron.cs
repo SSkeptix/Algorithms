@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Layer = System.Collections.Generic.List<NeuralNetworks.Neuron>;
 

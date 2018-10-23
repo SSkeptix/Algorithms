@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NeuralNetworks.Console
+﻿namespace NeuralNetworks.Console
 {
     interface ILogger
     {

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.FileExtensions;
-using Microsoft.Extensions.Configuration.Json;
 using System.IO;
 using System.Linq;
 
@@ -8,7 +6,6 @@ namespace NeuralNetworks.Console
 {
     public static class Program
     {
-        static int iii;
         static void Main()
         {
             ILogger logger = new ConsoleLogger();
