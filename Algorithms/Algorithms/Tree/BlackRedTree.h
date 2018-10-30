@@ -69,13 +69,17 @@ void BlackRedTree<T>::insert(const T& value)
 				newNode->moveDownBlackness();
 				newNode = newNode->parent->parent;
 				isChanged = true;
+				continue;
+			}
+			if (newNode->isNeedSimpleRotate()) {
+				newNode = newNode->simpleRotate();
+				isChanged = true;
+				continue;
 			}
 			if (newNode->isNeedRotate()) {
-				if (newNode->parent->parent == _root)
-					_root = newNode->rotate();
-				else
-					newNode->rotate();
+				newNode->rotate();
 				isChanged = true;
+				continue;
 			}
 		} while (isChanged);
 	}

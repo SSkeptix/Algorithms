@@ -26,6 +26,9 @@ struct BrNode
 	bool isNeedRotate();
 	BrNode<T>* rotate();
 
+	bool isNeedSimpleRotate();
+	BrNode<T>* simpleRotate();
+
 	short getChildCount();
 	BrNode<T>* getOneChildOrNull();
 	BrNode<T>* getBrother();
@@ -148,10 +151,9 @@ bool BrNode<T>::isNeedRotate() {
 	if (grandParent == NULL)
 		return false;
 
-	return isRed && parent->isRed 
-		// && grandParent has at least one black node or NULL node.
-		&& !(grandParent->left != NULL && grandParent->left->isRed
-			&& grandParent->right != NULL && grandParent->right->isRed);
+	return isRed && parent->isRed &&
+		((this == parent->left && parent == parent->parent->left)
+			|| (this == parent->right && parent == parent->parent->right));
 }
 
 template<class T>
@@ -161,11 +163,10 @@ BrNode<T>* BrNode<T>::rotate() {
 	// We have 3 nodes: grandParent, parent, and node -> now we will restructure them.
 
 	// 1) Sort them.
-	BrNode<T>* nodes[3] = { grandParent, parent, this };
-	for (int i = 0; i < 2; i++)
-		for (int j = 0; j < 2; j++)
-			if (nodes[j]->value > nodes[j + 1]->value)
-				std::swap(nodes[j], nodes[j + 1]);
+	std::vector<BrNode*> nodes = { grandParent, parent, this };
+	std::sort(nodes.begin(), nodes.end(), [](BrNode* a, BrNode* b) { 
+		return a->value < b->value;
+	});
 
 	// 2) Build sub tree. [0] - leftNode, [1] - root, [2] - right.
 	grandParent->replaceMeForParent(nodes[1]);
@@ -183,6 +184,39 @@ BrNode<T>* BrNode<T>::rotate() {
 	nodes[1]->setRight(nodes[2]);
 
 	return nodes[1];
+}
+
+template<class T>
+bool BrNode<T>::isNeedSimpleRotate() {
+	if (parent == NULL)
+		return false;
+
+	auto grandParent = parent->parent;
+	if (grandParent == NULL)
+		return false;
+
+	return isRed && parent->isRed && 
+		((this == parent->left && parent == parent->parent->right)
+			|| (this == parent->right && parent == parent->parent->left));
+}
+
+template<class T>
+BrNode<T>* BrNode<T>::simpleRotate() {
+	auto _parent = parent;
+	parent->replaceMeForParent(this);
+
+	if (value < _parent->value)
+	{
+		auto temp = right;
+		setRight(_parent);
+		_parent->setLeft(temp);
+	}
+	else {
+		auto temp = left;
+		setLeft(_parent);
+		_parent->setRight(temp);
+	}
+	return _parent;
 }
 
 template<class T>

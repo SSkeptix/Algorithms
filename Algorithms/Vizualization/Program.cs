@@ -23,12 +23,18 @@ namespace Vizualization
         static void Main(string[] args)
         {
             var reader = new StreamReader(JsonDataFileName);
-            string data = reader.ReadToEnd();
-            var trees = JsonConvert.DeserializeObject<Tree<int>[]>(data);
+            string[] data = reader.ReadToEnd().Split(';');
 
             int index = 1;
-            foreach (var tree in trees)
+            foreach (var jsonTree in data)
             {
+                Tree<int> tree = null;
+                try { tree = JsonConvert.DeserializeObject<Tree<int>>(jsonTree); }
+                catch { break; }
+
+                if (tree == null)
+                    continue;
+
                 var painter = new Painter<int>(tree);
                 painter.DrawTree(string.Format(ImageFileName, index.ToString("D2")));
                 index++;

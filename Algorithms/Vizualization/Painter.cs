@@ -18,7 +18,7 @@ namespace Vizualization
         public static readonly Color BackgoundColor = Color.White;
         public static readonly Color NodeColor = Color.Black;
         public static readonly Color ConnectionColor = Color.Black;
-        public static readonly Font Font = new Font(FontFamily.GenericSansSerif, 10);
+        public static readonly Font Font = new Font(FontFamily.GenericSansSerif, 8);
 
         private readonly float _height, _width;
         private readonly Tree<T> _tree;

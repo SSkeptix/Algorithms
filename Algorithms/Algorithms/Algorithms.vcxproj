@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsymptoticAnalyst.h" />
     <ClInclude Include="configs.h" />
     <ClInclude Include="HashFunctions.h" />
     <ClInclude Include="HashTable.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Tree\BrNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsymptoticAnalyst.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
